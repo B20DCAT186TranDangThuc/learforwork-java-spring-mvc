@@ -13,18 +13,23 @@
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
             <!-- <link rel="stylesheet" href="/css/demo.css"> -->
-            <title>Document</title>
+            <title>Home Page</title>
         </head>
 
         <body>
-            hello from jsp
+            <div class="container mt-5">
+                <div class="row">
 
-            <h1>
-                <c:out value="${eric}" />
-                ${eric}
-            </h1>
+                    <h1>
+                        Hello Admin
+                        <c:out value="${eric}" />
+                    </h1>
 
-            <button class="btn btn-warning">Submit</button>
+                    <hr>
+
+                    <a href="/admin/user" class="btn btn-primary">User Manager</a>
+                </div>
+            </div>
         </body>
 
         </html>
