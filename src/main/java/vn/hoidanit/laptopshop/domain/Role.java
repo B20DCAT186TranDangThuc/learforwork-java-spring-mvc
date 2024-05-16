@@ -20,8 +20,9 @@ public class Role {
 
     private String description;
 
+    // role - one => many - users . ctrl + k . press 's'
     @OneToMany(mappedBy = "role")
-    private List<User> user;
+    private List<User> users;
 
     public long getId() {
         return id;
