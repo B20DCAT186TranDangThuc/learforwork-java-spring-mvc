@@ -12,18 +12,8 @@
                 <meta name="author" content="Hỏi Dân IT" />
                 <title>Update User - Hỏi Dân IT</title>
                 <link href="/css/styles.css" rel="stylesheet" />
+
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-                <script>
-                    $(document).ready(() => {
-                        const avatarFile = $("#avatarFile");
-                        avatarFile.change(function (e) {
-                            const imgURL = URL.createObjectURL(e.target.files[0]);
-                            $("#avatarPreview").attr("src", imgURL);
-                            $("#avatarPreview").css({ "display": "block" });
-                        });
-                    });
-                </script>
             </head>
 
             <body class="sb-nav-fixed">
@@ -44,7 +34,7 @@
                                             <h3>Update a user</h3>
                                             <hr />
                                             <form:form method="post" action="/admin/user/update"
-                                                enctype="multipart/form-data" modelAttribute="newUser">
+                                                modelAttribute="newUser">
 
                                                 <div class="mb-3" style="display: none;">
                                                     <label class="form-label">Id:</label>
@@ -57,48 +47,17 @@
                                                         disabled="true" />
                                                 </div>
 
-                                                <div class="row">
-                                                    <div class="mb-3 col-12 col-md-6">
-                                                        <label class="form-label">Phone number:</label>
-                                                        <form:input type="text" class="form-control" path="phone" />
-                                                    </div>
-                                                    <div class="mb-3 col-12 col-md-6">
-                                                        <label class="form-label">Full Name:</label>
-                                                        <form:input type="text" class="form-control" path="fullName" />
-                                                    </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Phone number:</label>
+                                                    <form:input type="text" class="form-control" path="phone" />
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Full Name:</label>
+                                                    <form:input type="text" class="form-control" path="fullName" />
                                                 </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Address:</label>
                                                     <form:input type="text" class="form-control" path="address" />
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="mb-3 col-12 col-md-6">
-                                                        <label class="form-label">Role:</label>
-                                                        <form:select class="form-select" path="role.name">
-                                                            <form:option value="ADMIN">ADMIN</form:option>
-                                                            <form:option value="USER">USER</form:option>
-                                                        </form:select>
-                                                    </div>
-                                                    <div class="mb-3 col-12 col-md-6">
-                                                        <label for="avatarFile" class="form-label">Avatar:</label>
-                                                        <input class="form-control" type="file" id="avatarFile"
-                                                            name="updateFile" accept=".png, .jpg, .jpeg" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-12 mb-3">
-                                                    <c:choose>
-                                                        <c:when test="${not empty newUser.avatar}">
-                                                            <img style="max-height: 250px;" alt="avatar preview"
-                                                                id="avatarPreview"
-                                                                src="<c:url value='/images/avatar/${newUser.avatar}' />" />
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <img style="max-height: 250px;" alt="default avatar preview"
-                                                                id="avatarPreview"
-                                                                src="<c:url value='/images/avatar/no_image.jpg' />" />
-                                                        </c:otherwise>
-                                                    </c:choose>
                                                 </div>
 
                                                 <button type="submit" class="btn btn-warning">Update</button>

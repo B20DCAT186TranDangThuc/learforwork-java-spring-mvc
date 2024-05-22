@@ -12,33 +12,37 @@ import jakarta.servlet.ServletContext;
 
 @Service
 public class UploadService {
-
     private final ServletContext servletContext;
 
-    public UploadService(ServletContext servletContext) {
+    public UploadService(
+            ServletContext servletContext) {
+
         this.servletContext = servletContext;
     }
 
     public String handleSaveUploadFile(MultipartFile file, String targetFolder) {
-        byte[] bytes;
+        // relative path: absolute path
         String rootPath = this.servletContext.getRealPath("/resources/images");
         String finalName = "";
         try {
-            bytes = file.getBytes();
+            byte[] bytes = file.getBytes();
 
             File dir = new File(rootPath + File.separator + targetFolder);
             if (!dir.exists())
                 dir.mkdirs();
+
             // Create the file on server
             finalName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
+
             File serverFile = new File(dir.getAbsolutePath() + File.separator + finalName);
+            // uuid
+
             BufferedOutputStream stream = new BufferedOutputStream(
                     new FileOutputStream(serverFile));
             stream.write(bytes);
             stream.close();
-        }
-
-        catch (IOException e) {
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return finalName;
