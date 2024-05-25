@@ -46,7 +46,22 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- Genarate data   -->
+                                                <c:forEach var="product" items="${products}">
+                                                    <tr>
+                                                        <td>${product.id}</td>
+                                                        <td>${product.name}</td>
+                                                        <td>${product.price}</td>
+                                                        <td>${product.factory}</td>
+                                                        <td>
+                                                            <a href="/admin/product/${product.id}"
+                                                                class="btn btn-primary">View</a>
+                                                            <a href="/admin/product/update/${product.id}"
+                                                                class="btn btn-warning">Update</a>
+                                                            <a href="/admin/product/delete/${product.id}"
+                                                                class="btn btn-danger">Delete</a>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
                                             </tbody>
                                         </table>
                                     </div>

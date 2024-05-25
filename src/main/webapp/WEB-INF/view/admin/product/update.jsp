@@ -37,14 +37,14 @@
                                 <ol class="breadcrumb mb-4">
                                     <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
                                     <li class="breadcrumb-item active"><a href="/admin/product">Products</a></li>
-                                    <li class="breadcrumb-item active">Create</li>
+                                    <li class="breadcrumb-item active">Update</li>
                                 </ol>
                                 <div class="mt-5">
                                     <div class="row">
                                         <div class="col-md-6 col-12 mx-auto">
-                                            <h3>Create a product</h3>
+                                            <h3>Update a product</h3>
                                             <hr />
-                                            <form:form method="post" action="/admin/product/create"
+                                            <form:form method="post" action="/admin/product/update"
                                                 modelAttribute="newProduct" class="row" enctype="multipart/form-data">
                                                 <c:set var="errorName">
                                                     <form:errors path="name" cssClass="invalid-feedback" />
@@ -61,6 +61,11 @@
                                                 <c:set var="errorQuantity">
                                                     <form:errors path="quantity" cssClass="invalid-feedback" />
                                                 </c:set>
+
+                                                <div class="mb-3" style="display: none;">
+                                                    <label class="form-label">Id:</label>
+                                                    <form:input type="text" class="form-control" path="id" />
+                                                </div>
 
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Name:</label>
@@ -132,12 +137,22 @@
                                                         accept=".png, .jpg, .jpeg" name="productNameFile" />
                                                 </div>
                                                 <div class="col-12 mb-3">
-                                                    <img style="max-height: 250px; display: none;" alt="avatar preview"
-                                                        id="avatarPreview" />
+                                                    <c:choose>
+                                                        <c:when test="${not empty newProduct.image}">
+                                                            <img style="max-height: 250px;" alt="avatar preview"
+                                                                id="avatarPreview"
+                                                                src="<c:url value='/images/product/${newProduct.image}' />" />
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <img style="max-height: 250px;" alt="default avatar preview"
+                                                                id="avatarPreview"
+                                                                src="<c:url value='/images/product/default.jpg' />" />
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
 
                                                 <div class="col-12 mb-5">
-                                                    <button type="submit" class="btn btn-primary">Create</button>
+                                                    <button type="submit" class="btn btn-warning">Update</button>
                                                 </div>
                                             </form:form>
 
