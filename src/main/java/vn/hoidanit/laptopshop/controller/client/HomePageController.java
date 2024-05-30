@@ -57,11 +57,12 @@ public class HomePageController {
     public String handRegister(
             @ModelAttribute("registerUser") @Valid RegisterDTO registerDTO,
             BindingResult bindingResult) {
-        // TODO: process POST request
-        List<FieldError> errors = bindingResult.getFieldErrors();
-        for (FieldError error : errors) {
-            System.out.println(error.getField() + " - " + error.getDefaultMessage());
+
+        // validate
+        if (bindingResult.hasErrors()) {
+            return "client/auth/register";
         }
+
         User user = this.userService.registerDTOtoUser(registerDTO);
 
         String hashPassword = this.passwordEncoder.encode(user.getPassword());
