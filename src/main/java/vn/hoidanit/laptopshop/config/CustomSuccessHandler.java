@@ -59,7 +59,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             session.setAttribute("avatar", user.getAvatar());
             session.setAttribute("id", user.getId());
             session.setAttribute("email", user.getEmail());
-            int sum = user.getCart().getSum();
+            int sum = user.getCart() == null ? 0 : user.getCart().getSum();
             session.setAttribute("sum", sum);
         }
 
@@ -71,7 +71,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     // hàm này sẽ xử lý sau khi user đăng nhập thành công
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-            Authentication authentication) throws IOException, ServletException {
+                                        Authentication authentication) throws IOException, ServletException {
         String targetUrl = determineTargetUrl(authentication);
 
         if (response.isCommitted()) {
