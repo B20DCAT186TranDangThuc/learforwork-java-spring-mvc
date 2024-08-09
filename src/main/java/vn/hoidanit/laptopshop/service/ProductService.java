@@ -2,6 +2,7 @@ package vn.hoidanit.laptopshop.service;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.laptopshop.domain.Cart;
@@ -46,7 +47,7 @@ public class ProductService {
         return this.productRepository.findAll();
     }
 
-    public void handleAddProductToCart(String email, long productId) {
+    public void handleAddProductToCart(String email, long productId, HttpSession session) {
         // check user
         User user = userService.getUserByEmail(email);
         if (user != null) {
@@ -55,7 +56,7 @@ public class ProductService {
                 // create new cart
                 cart = new Cart();
                 cart.setUser(user);
-                cart.setSum(1);
+                cart.setSum(0);
 
                 cart = cartRepository.save(cart);
             }
@@ -63,11 +64,24 @@ public class ProductService {
             // find product by id
             Product product = getProductById(productId);
             if (product != null) {
-                CartDetail cartDetail = new CartDetail();
-                cartDetail.setCart(cart);
-                cartDetail.setProduct(product);
-                cartDetail.setPrice(product.getPrice());
-                cartDetail.setQuantity(1);
+                // check exist
+                CartDetail cartDetail = cartDetailRepository.findByCartAndProduct(cart, product);
+
+                if (cartDetail == null) {
+                    cartDetail = new CartDetail();
+                    cartDetail.setCart(cart);
+                    cartDetail.setProduct(product);
+                    cartDetail.setPrice(product.getPrice());
+                    cartDetail.setQuantity(1);
+
+                    // update cart (sum)
+                    int s = cart.getSum() + 1;
+                     cart.setSum(s);
+                     cartRepository.save(cart);
+                     session.setAttribute("sum", s);
+                } else {
+                    cartDetail.setQuantity(cartDetail.getQuantity() + 1);
+                }
 
                 cartDetailRepository.save(cartDetail);
             }
