@@ -3,6 +3,8 @@ package org.example.laptopshop.service;
 import java.util.List;
 
 import org.example.laptopshop.domain.dto.RegisterDTO;
+import org.example.laptopshop.repository.OrderRepository;
+import org.example.laptopshop.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import org.example.laptopshop.domain.Role;
@@ -14,11 +16,17 @@ import org.example.laptopshop.repository.UserRepository;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
 
     public UserService(UserRepository userRepository,
-            RoleRepository roleRepository) {
+                       RoleRepository roleRepository,
+                       ProductRepository productRepository,
+                       OrderRepository orderRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
     }
 
     public List<User> getAllUsers() {
@@ -63,4 +71,15 @@ public class UserService {
         return this.userRepository.findByEmail(email);
     }
 
+    public Long countUsers() {
+        return userRepository.count();
+    }
+
+    public Long countProducts() {
+        return productRepository.count();
+    }
+
+    public Long countOrders() {
+        return orderRepository.count();
+    }
 }
