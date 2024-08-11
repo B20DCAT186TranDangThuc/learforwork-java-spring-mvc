@@ -1,6 +1,7 @@
 package org.example.laptopshop.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.servlet.http.HttpSession;
 import org.example.laptopshop.domain.Cart;
@@ -76,9 +77,9 @@ public class ProductService {
 
                     // update cart (sum)
                     int s = cart.getSum() + 1;
-                     cart.setSum(s);
-                     cartRepository.save(cart);
-                     session.setAttribute("sum", s);
+                    cart.setSum(s);
+                    cartRepository.save(cart);
+                    session.setAttribute("sum", s);
                 } else {
                     cartDetail.setQuantity(cartDetail.getQuantity() + 1);
                 }
@@ -92,4 +93,39 @@ public class ProductService {
         return cartRepository.findByUser(user);
     }
 
+    public void handleRemoveCartDetail(long cartDetailId, HttpSession session) {
+        Optional<CartDetail> cartDetailOptional = this.cartDetailRepository.findById(cartDetailId);
+        if (cartDetailOptional.isPresent()) {
+            CartDetail cartDetail = cartDetailOptional.get();
+
+            Cart currentCart = cartDetail.getCart();
+            // delete cart-detail
+            this.cartDetailRepository.deleteById(cartDetailId);
+
+            // update cart
+            if (currentCart.getSum() > 1) {
+                // update current cart
+                int s = currentCart.getSum() - 1;
+                currentCart.setSum(s);
+                session.setAttribute("sum", s);
+                this.cartRepository.save(currentCart);
+            } else {
+                // delete cart (sum = 1)
+                this.cartRepository.deleteById(currentCart.getId());
+                session.setAttribute("sum", 0);
+            }
+        }
+    }
+
+
+    public void handleUpdateCartBeforeCheckout(List<CartDetail> cartDetails) {
+        for (CartDetail cartDetail : cartDetails) {
+            Optional<CartDetail> cdOptional = this.cartDetailRepository.findById(cartDetail.getId());
+            if (cdOptional.isPresent()) {
+                CartDetail currentCartDetail = cdOptional.get();
+                currentCartDetail.setQuantity(cartDetail.getQuantity());
+                this.cartDetailRepository.save(currentCartDetail);
+            }
+        }
+    }
 }
