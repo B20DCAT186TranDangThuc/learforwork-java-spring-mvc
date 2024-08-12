@@ -2,9 +2,13 @@ package org.example.laptopshop.controller.client;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import org.example.laptopshop.domain.Order;
 import org.example.laptopshop.domain.Product;
 import org.example.laptopshop.domain.User;
 import org.example.laptopshop.domain.dto.RegisterDTO;
+import org.example.laptopshop.service.OrderService;
 import org.example.laptopshop.service.ProductService;
 import org.example.laptopshop.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,14 +28,17 @@ public class HomePageController {
     private final ProductService productService;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final OrderService orderService;
 
     public HomePageController(
             ProductService productService,
             UserService userService,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            OrderService orderService) {
         this.productService = productService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.orderService = orderService;
     }
 
     @GetMapping("/")
@@ -79,5 +86,16 @@ public class HomePageController {
     public String getDenyPage(Model model) {
         return "client/auth/deny";
     }
+    @GetMapping("/order-history")
+    public String getOrderHistoryPage(Model model, HttpServletRequest request) {
+        User currentUser = new User();// null
+        HttpSession session = request.getSession(false);
+        long id = (long) session.getAttribute("id");
+        currentUser.setId(id);
 
+        List<Order> orders = this.orderService.fetchOrderByUser(currentUser);
+        model.addAttribute("orders", orders);
+
+        return "client/cart/order-history";
+    }
 }
