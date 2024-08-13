@@ -6,6 +6,8 @@ import java.util.Optional;
 import jakarta.servlet.http.HttpSession;
 import org.example.laptopshop.domain.*;
 import org.example.laptopshop.repository.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -179,5 +181,9 @@ public class ProductService {
             }
         }
 
+    }
+
+    public Page<Product> fecthProduct(Pageable pageable) {
+        return this.productRepository.findAll(pageable);
     }
 }
