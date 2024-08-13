@@ -5,6 +5,8 @@ import java.util.List;
 import org.example.laptopshop.domain.dto.RegisterDTO;
 import org.example.laptopshop.repository.OrderRepository;
 import org.example.laptopshop.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import org.example.laptopshop.domain.Role;
@@ -29,8 +31,8 @@ public class UserService {
         this.orderRepository = orderRepository;
     }
 
-    public List<User> getAllUsers() {
-        return this.userRepository.findAll();
+    public Page<User> getAllUsers(Pageable pageable) {
+        return this.userRepository.findAll(pageable);
     }
 
     public List<User> getAllUsersByEmail(String email) {
